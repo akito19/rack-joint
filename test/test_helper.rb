@@ -22,6 +22,6 @@ def same_host_config
   Rack::Builder.parse_file('test/config/set_same_host_config.ru').first
 end
 
-def same_path_config
-  Rack::Builder.parse_file('test/config/set_same_path_config.ru').first
+def same_url_config
+  Rack::Builder.parse_file('test/config/set_same_url_config.ru').first
 end

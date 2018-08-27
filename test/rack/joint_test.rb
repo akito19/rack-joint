@@ -81,10 +81,10 @@ class JointTest < MiniTest::Test
     end
   end
 
-  class SetSamePathConfigTest < JointTest
+  class SetSameURLTest < JointTest
     def test_joint
       assert_raises Rack::Joint::BadRedirectError do
-        same_path_config
+        same_url_config
       end
     end
   end

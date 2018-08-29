@@ -3,10 +3,10 @@
 module Rack
   class Joint
     class Redirect
-      attr_reader :responses
-      attr_reader :old_host
-      def initialize(old_host)
+      attr_reader :responses, :request, :old_host
+      def initialize(request, old_host)
         @responses = []
+        @request = request
         @old_host = old_host
       end
 
@@ -14,7 +14,7 @@ module Rack
       # @param &block [block] Given block with `redirect`.
       # @return [Array] Return Array consisted of block under `redirect`.
       def redirect(old_path, &block)
-        responses << RedirectInterface.new(old_host, old_path, &block).apply!
+        responses << RedirectInterface.new(request, old_host, old_path, &block).apply!
       end
     end
   end

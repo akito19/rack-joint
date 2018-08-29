@@ -1,8 +1,9 @@
 module Rack
   class Joint
     class Context
-      attr_reader :responses
-      def initialize
+      attr_reader :request, :responses
+      def initialize(request)
+        @request = request
         @responses = []
       end
 
@@ -11,7 +12,7 @@ module Rack
       # @return [Array] Return Array consisted of block under `redirect`.
       def host(old_host, &block)
         responses << {
-          "#{old_host}" => Redirect.new(old_host).instance_exec(&block)
+          "#{old_host}" => Redirect.new(request, old_host).instance_exec(&block)
         }
       end
     end

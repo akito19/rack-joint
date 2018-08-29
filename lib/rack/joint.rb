@@ -6,21 +6,20 @@ require "rack/joint/version"
 
 module Rack
   class Joint
-    attr_reader :app
-    attr_reader :mappings
+    attr_reader :app, :block
     def initialize(app, &block)
       @app = app
-      @mappings = Context.new.instance_exec(&block) if block_given?
+      @block = block if block_given?
     end
 
     def call(env)
-      rack_env = Rack::Request.new(env)
-      env_host = rack_env.host
-      env_path = rack_env.fullpath
-      requests = valid_mapping(env_host)
+      rack_request = Rack::Request.new(env)
+      mappings = Context.new(rack_request).instance_exec(&block)
+      env_host = rack_request.host
+      responses = valid_mapping(mappings, env_host)
 
-      if check_redirect?(requests, env_path)
-        redirect_info(requests, env_path)
+      if check_redirect?(rack_request, responses)
+        redirect_info(rack_request, responses)
       else
         app.call(env)
       end
@@ -28,28 +27,31 @@ module Rack
 
     private
 
-    # @param host [String] Requested hostname(env)
+    # @param mapping [Array] URI mappings for redirecting.
+    # @param host    [String] Requested hostname(env).
     # @return [Array] Return URL mapped responses.
-    def valid_mapping(host)
+    def valid_mapping(mappings, host)
       return [] unless mappings
       mappings.select { |res| res[host] }.first.values.flatten(1)
     end
 
-    # @param  requests [Array] Mapped redirect response information.
-    # @param  path     [String] Requested pathname(env)
+    # @param  request   [Rack::Request] Request env.
+    # @param  responses [Array] Mapped redirect response information.
     # @return [Boolean]
-    def check_redirect?(requests, path)
-      requests.map do |req|
-        req[2].to_s.include?(path)
+    def check_redirect?(request, responses)
+      current_url = request.url
+      responses.map do |res|
+        res[2].to_s.include?(current_url)
       end.include?(true)
     end
 
-    # @param  requests [Array] Mapped redirect response information.
-    # @param  path     [String] Requested pathname(env)
+    # @param  request   [Rack::Request] Request env.
+    # @param  responses [Array] Mapped redirect response information.
     # @return [Array] Return response corresponded request.
-    def redirect_info(requests, path)
-      requests.select do |req|
-        req[2].to_s.include?(path)
+    def redirect_info(request, responses)
+      current_url = request.url
+      responses.select do |res|
+        res[2].to_s.include?(current_url)
       end.to_a.flatten(1)
     end
   end

@@ -32,7 +32,7 @@ require 'rack/joint'
 use Rack::Joint do
   host 'example.com' do
     # If you access `http://example.com/dogs/bark.html`,
-    # redirect to `http://example.org/bowwow.html` with 301. 
+    # redirect to `http://example.org/bowwow.html` with 301.
     redirect '/dogs/bark.html' do
       new_host 'example.org'
       to '/bowwow.html'
@@ -40,12 +40,14 @@ use Rack::Joint do
     end
 
     # If you access `http://example.com/cats.html`,
-    # redirect to `http://example.org/meow/mew` with 302.
+    # redirect to `https://example.org/meow/mew` with 302.
     redirect '/cats.html' do
       new_host 'example.org'
+      ssl true
       to '/meow/mew'
       status 302
     end
+  end
 
   host 'example.net' do
     # If you access `http://example.net/frog.html`,
@@ -53,11 +55,11 @@ use Rack::Joint do
     redirect '/frog.html' do
       to '/croak'
     end
-    
+
     # If you access `http://example.net/quack`,
     # redirect to `http://example.org/quack` with 301.
     redirect '/quack' do
-      new_host 'example.org' 
+      new_host 'example.org'
     end
   end
 end
@@ -67,13 +69,14 @@ run lambda { |env| [200, {'Content-Type' => 'text/plain'}, ['Hello World!']] }
 
 You can use following resources with block.
 
-| Resource | Description |
-| :------- | :---------- |
-| `host`   | Host name. |
-| `redirect` | Path name. |
-| `new_host` | A new host name redirects to. Optional. |
-| `to` | A new path name redirects to. Optional. |
-| `status` | Status when redirecting. You can use `301`, `302`, `303`, `307`, `308`; which is `301` to default. |
+| Resource | Type | Description |
+| :------- | :--- | :---------- |
+| `host`   | String | Host name. |
+| `redirect` | String | Path name. |
+| `ssl` | Boolean | Whether to enable SSL or not; which is `false` to default. |
+| `new_host` | String | A new host name redirects to. Optional. |
+| `to` | String | A new path name redirects to. Optional. |
+| `status` | Integer | Status when redirecting. You can use `301`, `302`, `303`, `307`, `308`; which is `301` to default. |
 
 ## Development
 

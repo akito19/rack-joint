@@ -99,4 +99,20 @@ class JointTest < MiniTest::Test
       assert_equal 200, last_response.status
     end
   end
+
+  class HostWithSSlTest < JointTest
+    def app
+      hosts_with_ssl_config
+    end
+
+    def test_joint
+      get '/dogs/bark.html', {}, 'HTTP_HOST' => 'example.com'
+      assert_equal 301, last_response.status
+      assert_equal 'https://example.org/bowwow/woof', last_response['location']
+
+      get '/cats/meow.html', {}, 'HTTP_HOST' => 'example.com'
+      assert_equal 301, last_response.status
+      assert_equal 'http://example.org/meow/meow/mew', last_response['location']
+    end
+  end
 end

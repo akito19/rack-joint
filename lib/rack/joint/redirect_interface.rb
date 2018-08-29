@@ -6,25 +6,22 @@ module Rack
     class BadRedirectError < StandardError; end
 
     class RedirectInterface
-      attr_reader :old_host
-      attr_reader :old_path
-      attr_reader :old_url
-      def initialize(old_host, old_path, &block)
+      attr_reader :request, :old_host, :old_path, :old_url
+      def initialize(request, old_host, old_path, &block)
+        @status = 301
+        @ssl = false
+        @request = request
         @old_host = old_host
         @old_path = old_path
-        # Set `http` for `build_url` method becuase it doesn't depend on HTTP method tentatively.
-        # TODO: Fix this to get parameters when call them on GET request instead of `rack up`.
-        @old_url = build_uri('http', old_host, old_path)
+        @old_url = build_uri(request.scheme, old_host, old_path)
         instance_exec(&block)
       end
 
       # @return [Array] Return response given parameters in `config.ru`.
       def apply!
-        @status ||= 301
-        @scheme ||= 'http'
         @new_host ||= old_host
         @new_path ||= old_path
-        new_location = build_uri(@scheme, @new_host, @new_path)
+        new_location = build_uri(uri_scheme, @new_host, @new_path)
         if old_url == new_location
           raise BadRedirectError.new('Redirect URL has been declared the same as current URL.')
         end
@@ -32,6 +29,15 @@ module Rack
       end
 
       private
+
+      # @return [String] `http` or `https`
+      def uri_scheme
+        if @ssl
+          'https'
+        else
+          'http'
+        end
+      end
 
       # @param scheme [String] 'http' or 'https'
       # @param host [String] Host name
@@ -46,14 +52,9 @@ module Rack
       end
 
       # @param scheme [Boolean] Wether enabling SSL or not.
-      # @return [String] Return 'http' or 'https'.
+      # @return [Boolean]
       def ssl(scheme)
-        @scheme =
-          if scheme
-            'https'
-          else
-            'http'
-          end
+        @ssl = scheme
       end
 
       # @param status [Integer] `status` parameter when redirecting in `config.ru`.

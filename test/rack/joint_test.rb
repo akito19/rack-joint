@@ -14,6 +14,7 @@ class JointTest < MiniTest::Test
       get '/foo/bar/baz', {}, 'HTTP_HOST' => 'example.com'
       assert_equal 301, last_response.status
       assert_equal 'http://example.org/path/to/blah', last_response['location']
+      assert_equal 'Redirect from: http://example.com/foo/bar/baz', last_response.body
     end
   end
 
@@ -26,14 +27,17 @@ class JointTest < MiniTest::Test
       get '/dogs/bark.html', {}, 'HTTP_HOST' => 'example.com'
       assert_equal 301, last_response.status
       assert_equal 'http://example.org/bowwow/woof', last_response['location']
+      assert_equal 'Redirect from: http://example.com/dogs/bark.html', last_response.body
 
       get '/cats/meow.html', {}, 'HTTP_HOST' => 'example.com'
       assert_equal 302, last_response.status
       assert_equal 'http://example.org/meow/meow/mew', last_response['location']
+      assert_equal 'Redirect from: http://example.com/cats/meow.html', last_response.body
 
       get '/frog.html', {}, 'HTTP_HOST' => 'example.com'
       assert_equal 301, last_response.status
       assert_equal 'http://example.org/croak', last_response['location']
+      assert_equal 'Redirect from: http://example.com/frog.html', last_response.body
     end
   end
 
@@ -46,10 +50,12 @@ class JointTest < MiniTest::Test
       get '/dogs/bark.html', {}, 'HTTP_HOST' => 'example.net'
       assert_equal 301, last_response.status
       assert_equal 'http://example.org/bowwow/woof', last_response['location']
+      assert_equal 'Redirect from: http://example.net/dogs/bark.html', last_response.body
 
       get '/cats/meow.html', {}, 'HTTP_HOST' => 'example.com'
       assert_equal 301, last_response.status
       assert_equal 'http://example.org/meow/meow/mew', last_response['location']
+      assert_equal 'Redirect from: http://example.com/cats/meow.html', last_response.body
     end
   end
 
@@ -62,10 +68,12 @@ class JointTest < MiniTest::Test
       get '/dogs/bark.html', {}, 'HTTP_HOST' => 'example.com'
       assert_equal 301, last_response.status
       assert_equal 'http://example.com/bowwow/woof', last_response['location']
+      assert_equal 'Redirect from: http://example.com/dogs/bark.html', last_response.body
 
       get '/cats/meow.html', {}, 'HTTP_HOST' => 'example.com'
       assert_equal 302, last_response.status
       assert_equal 'http://example.com/meow/meow/mew', last_response['location']
+      assert_equal 'Redirect from: http://example.com/cats/meow.html', last_response.body
     end
   end
 
@@ -78,13 +86,18 @@ class JointTest < MiniTest::Test
       get '/foo', {}, 'HTTP_HOST' => 'example.com'
       assert_equal 301, last_response.status
       assert_equal 'http://example.org/foo', last_response['location']
+      assert_equal 'Redirect from: http://example.com/foo', last_response.body
     end
   end
 
   class SetSameURLTest < JointTest
+    def app
+      same_url_config
+    end
+
     def test_joint
       assert_raises Rack::Joint::BadRedirectError do
-        same_url_config
+        get '/foo/bar/baz', {}, 'HTTP_HOST' => 'example.com'
       end
     end
   end
@@ -100,7 +113,7 @@ class JointTest < MiniTest::Test
     end
   end
 
-  class HostWithSSlTest < JointTest
+  class HostWithSSLTest < JointTest
     def app
       hosts_with_ssl_config
     end
@@ -109,10 +122,25 @@ class JointTest < MiniTest::Test
       get '/dogs/bark.html', {}, 'HTTP_HOST' => 'example.com'
       assert_equal 301, last_response.status
       assert_equal 'https://example.org/bowwow/woof', last_response['location']
+      assert_equal 'Redirect from: http://example.com/dogs/bark.html', last_response.body
 
       get '/cats/meow.html', {}, 'HTTP_HOST' => 'example.com'
       assert_equal 301, last_response.status
       assert_equal 'http://example.org/meow/meow/mew', last_response['location']
+      assert_equal 'Redirect from: http://example.com/cats/meow.html', last_response.body
+    end
+  end
+
+  class AccessWithSSLHostTest < JointTest
+    def app
+      get_url_with_ssl_config
+    end
+
+    def test_joint
+      get '/foo/bar/baz', {}, 'HTTP_HOST' => 'example.com', 'HTTPS' => 'on'
+      assert_equal 301, last_response.status
+      assert_equal 'https://example.org/path/to/blah', last_response['location']
+      assert_equal 'Redirect from: https://example.com/foo/bar/baz', last_response.body
     end
   end
 end

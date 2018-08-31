@@ -2,6 +2,9 @@
 
 ## master
 
+### 0.3.0 (2018-09-01)
+* Determine scheme in response to requests. [#7](https://github.com/akito19/rack-joint/pull/7)
+
 ### 0.2.0 (2018-08-30)
 * Enable to use SSL when redirecting. [#4](https://github.com/akito19/rack-joint/pull/4)
 * Refactor to run redirect process. [#5](https://github.com/akito19/rack-joint/pull/5)

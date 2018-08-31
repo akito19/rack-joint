@@ -73,9 +73,9 @@ You can use following resources with block.
 | :------- | :--- | :---------- |
 | `host`   | String | Host name. |
 | `redirect` | String | Path name. |
-| `ssl` | Boolean | Whether to enable SSL or not; which is `false` to default. |
-| `new_host` | String | A new host name redirects to. Optional. |
-| `to` | String | A new path name redirects to. Optional. |
+| `ssl` | Boolean | Whether to enable SSL. If the option isn't set, the scheme of `Location` header is determined in response to GET request. |
+| `new_host` | String | A new host name redirects to. |
+| `to` | String | A new path name redirects to. |
 | `status` | Integer | Status when redirecting. You can use `301`, `302`, `303`, `307`, `308`; which is `301` to default. |
 
 ## Development

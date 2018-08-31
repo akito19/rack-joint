@@ -7,6 +7,17 @@ use Rack::Joint do
       new_host 'example.org'
       to '/path/to/blah'
     end
+
+    redirect '/dogs/bark.html' do
+      ssl false
+      new_host 'example.org'
+      to '/bowwow'
+    end
+
+    redirect '/cats/meow.html' do
+      new_host 'example.org'
+      to '/meow'
+    end
   end
 end
 

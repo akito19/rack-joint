@@ -141,6 +141,16 @@ class JointTest < MiniTest::Test
       assert_equal 301, last_response.status
       assert_equal 'https://example.org/path/to/blah', last_response['location']
       assert_equal 'Redirect from: https://example.com/foo/bar/baz', last_response.body
+
+      get '/dogs/bark.html', {}, 'HTTP_HOST' => 'example.com', 'HTTPS' => 'on'
+      assert_equal 301, last_response.status
+      assert_equal 'http://example.org/bowwow', last_response['location']
+      assert_equal 'Redirect from: https://example.com/dogs/bark.html', last_response.body
+
+      get '/cats/meow.html', {}, 'HTTP_HOST' => 'example.com', 'HTTPS' => 'on'
+      assert_equal 301, last_response.status
+      assert_equal 'https://example.org/meow', last_response['location']
+      assert_equal 'Redirect from: https://example.com/cats/meow.html', last_response.body
     end
   end
 end

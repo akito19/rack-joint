@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["kasai@akito19.com"]
 
   spec.summary       = %q{A rack middleware for redirecting.}
-  spec.description   = %q{A rack middleware to help you to redirect.}
+  spec.description   = %q{Rack::Joint is a rack middleware to help redirecting to each path.}
   spec.homepage      = "https://github.com/akito19/rack-joint"
   spec.license       = "MIT"
 

@@ -62,6 +62,16 @@ use Rack::Joint do
       new_host 'example.org'
     end
   end
+
+  # Following description allows you to redirect to URL you set with only host replaced.
+  #
+  # e.g. When accessing 'http://example.io/foo/bar/baz',
+  #      redirect to `http://example.org/foob/bar/baz` with 301.
+  host 'example.io' do
+    redirect do
+      new_host 'example.org'
+    end
+  end
 end
 
 run lambda { |env| [200, {'Content-Type' => 'text/plain'}, ['Hello World!']] }
@@ -71,12 +81,12 @@ You can use following resources with block.
 
 | Resource | Type | Description |
 | :------- | :--- | :---------- |
-| `host`   | String | Host name. |
-| `redirect` | String | Path name. |
-| `ssl` | Boolean | Whether to enable SSL. If the option isn't set, the scheme of `Location` header is determined in response to GET request. |
-| `new_host` | String | A new host name redirects to. |
-| `to` | String | A new path name redirects to. |
-| `status` | Integer | Status when redirecting. You can use `301`, `302`, `303`, `307`, `308`; which is `301` to default. |
+| `host`   | `string` | Required. Host name. |
+| `redirect` | `string` | Path name. If you give nothing with this option, Rack::Joint will replace only host name. |
+| `ssl` | `boolean` | Whether to enable SSL. If the option isn't set, the scheme of `Location` header is determined in response to GET request. |
+| `new_host` | `string` | A new host name redirects to. |
+| `to` | `string` | A new path name redirects to. |
+| `status` | `integer` | Status when redirecting. You can use `301`, `302`, `303`, `307`, `308`; which is `301` to default. |
 
 ## Development
 

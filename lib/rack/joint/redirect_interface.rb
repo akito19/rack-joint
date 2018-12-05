@@ -6,14 +6,13 @@ module Rack
     class BadRedirectError < StandardError; end
 
     class RedirectInterface
-      attr_reader :scheme, :request_scheme, :old_host, :old_path, :old_url
+      attr_reader :scheme, :request_scheme, :old_host, :old_path
       def initialize(request, old_host, old_path, &block)
         @status = 301
         @scheme = nil
         @request_scheme = request.scheme
         @old_host = old_host
-        @old_path = old_path
-        @old_url = build_uri(request_scheme, old_host, old_path)
+        @old_path = old_path || request.path_info
         instance_exec(&block)
       end
 
@@ -22,6 +21,7 @@ module Rack
         @scheme ||= request_scheme
         @new_host ||= old_host
         @new_path ||= old_path
+        old_url = build_uri(request_scheme, old_host, old_path)
         new_location = build_uri(scheme, @new_host, @new_path)
         if old_url == new_location
           raise BadRedirectError.new('Redirect URL has been declared the same as current URL.')

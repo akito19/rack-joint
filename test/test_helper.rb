@@ -34,3 +34,6 @@ def get_url_with_ssl_config
   Rack::Builder.parse_file('test/config/set_get_https_config.ru').first
 end
 
+def redirect_all_paths
+  Rack::Builder.parse_file('test/config/set_redirect_all_paths_config.ru').first
+end

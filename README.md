@@ -88,6 +88,10 @@ You can use following resources with block.
 | `to` | `string` | A new path name redirects to. |
 | `status` | `integer` | Status when redirecting. You can use `301`, `302`, `303`, `307`, `308`; which is `301` to default. |
 
+#### Supplement
+
+[This library's test case](https://github.com/akito19/rack-joint/tree/master/test/config) will be actual samples.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

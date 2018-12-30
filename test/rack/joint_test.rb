@@ -113,24 +113,6 @@ class JointTest < MiniTest::Test
     end
   end
 
-  class HostWithSSLTest < JointTest
-    def app
-      hosts_with_ssl_config
-    end
-
-    def test_joint
-      get '/dogs/bark.html', {}, 'HTTP_HOST' => 'example.com'
-      assert_equal 301, last_response.status
-      assert_equal 'https://example.org/bowwow/woof', last_response['location']
-      assert_equal 'Redirect from: http://example.com/dogs/bark.html', last_response.body
-
-      get '/cats/meow.html', {}, 'HTTP_HOST' => 'example.com'
-      assert_equal 301, last_response.status
-      assert_equal 'http://example.org/meow/meow/mew', last_response['location']
-      assert_equal 'Redirect from: http://example.com/cats/meow.html', last_response.body
-    end
-  end
-
   class AccessWithSSLHostTest < JointTest
     def app
       get_url_with_ssl_config

@@ -26,10 +26,6 @@ def same_url_config
   Rack::Builder.parse_file('test/config/set_same_url_config.ru').first
 end
 
-def hosts_with_ssl_config
-  Rack::Builder.parse_file('test/config/set_hosts_with_ssl_config.ru').first
-end
-
 def get_url_with_ssl_config
   Rack::Builder.parse_file('test/config/set_get_https_config.ru').first
 end

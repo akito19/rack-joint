@@ -1,4 +1,3 @@
-
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "rack/joint/version"
@@ -10,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["kasai@akito19.com"]
 
   spec.summary       = %q{A rack middleware for redirecting.}
-  spec.description   = %q{Rack::Joint is a rack middleware to help redirecting to each path.}
+  spec.description   = %q{Rack::Joint is a rack middleware to set redirect configuration with your anticipation.}
   spec.homepage      = "https://github.com/akito19/rack-joint"
   spec.license       = "MIT"
 
@@ -22,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "rack"
-  spec.add_development_dependency "bundler", "~> 1.16"
+  spec.add_development_dependency "bundler", "~> 1.17"
   spec.add_development_dependency "rake", "~> 12.0"
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "rack-test"

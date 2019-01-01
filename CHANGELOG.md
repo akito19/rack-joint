@@ -2,7 +2,7 @@
 
 ## master
 
-### 0.3.2 (2018-01-01)
+### 0.3.2 (2019-01-01)
 * Revise test files' names. [#11](https://github.com/akito19/rack-joint/pull/11)
 * Support for Ruby 2.6.0 and update gemspec. [#12](https://github.com/akito19/rack-joint/pull/12)
 

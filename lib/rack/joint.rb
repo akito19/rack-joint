@@ -2,6 +2,7 @@ require "rack"
 require "rack/joint/context"
 require "rack/joint/redirect"
 require "rack/joint/redirect_interface"
+require "rack/joint/url_builder"
 require "rack/joint/version"
 
 module Rack
@@ -27,7 +28,7 @@ module Rack
 
     private
 
-    # @param mapping [Array] URI mappings for redirecting.
+    # @param mappings [Array] URI mappings for redirecting.
     # @param host    [String] Requested hostname(env).
     # @return [Array] Return URL mapped responses.
     def valid_mapping(mappings, host)

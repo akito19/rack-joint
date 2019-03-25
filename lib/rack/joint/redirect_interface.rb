@@ -1,15 +1,14 @@
 # frozen_string_literal: true
-require 'uri'
-
 module Rack
   class Joint
     class BadRedirectError < StandardError; end
 
     class RedirectInterface
-      attr_reader :scheme, :request_scheme, :old_host, :old_path
+      attr_reader :scheme, :request_scheme, :request_query, :old_host, :old_path
       def initialize(request, old_host, old_path, &block)
         @status = 301
         @scheme = nil
+        @request_query = request.query_string
         @request_scheme = request.scheme
         @old_host = old_host
         @old_path = old_path || request.path_info
@@ -21,8 +20,8 @@ module Rack
         @scheme ||= request_scheme
         @new_host ||= old_host
         @new_path ||= old_path
-        old_url = build_uri(request_scheme, old_host, old_path)
-        new_location = build_uri(scheme, @new_host, @new_path)
+        old_url = UrlBuilder.new(request_scheme, request_query, old_host, old_path).build
+        new_location = UrlBuilder.new(scheme, request_query, @new_host, @new_path).build
         if old_url == new_location
           raise BadRedirectError.new('Redirect URL has been declared the same as current URL.')
         end
@@ -30,18 +29,6 @@ module Rack
       end
 
       private
-
-      # @param scheme [String] 'http' or 'https'
-      # @param host [String] Host name
-      # @param path [String] Path name
-      # @return [URI]
-      def build_uri(scheme, host, path)
-        if scheme == 'https'
-          URI::HTTPS.build({ scheme: scheme, host: host, path: path }).to_s
-        else
-          URI::HTTP.build({ scheme: scheme, host: host, path: path }).to_s
-        end
-      end
 
       # @param flag [Boolean]
       # @return [String] `http` or `https`

@@ -2,6 +2,9 @@
 
 ## master
 
+### 0.3.4 (2019-03-25)
+* Allow query parameters when request URLs have them. [#18](https://github.com/akito19/rack-joint/pull/18)
+
 ### 0.3.3 (2019-01-19)
 * Support Bundler2. [#15](https://github.com/akito19/rack-joint/pull/15)
 

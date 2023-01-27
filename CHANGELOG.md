@@ -2,6 +2,9 @@
 
 ## master
 
+### 0.3.5
+* Add Ruby 3.1 and 3.2 test and specify Rack version. [#21](https://github.com/akito19/rack-joint/pull/21)
+
 ### 0.3.4 (2019-03-25)
 * Allow query parameters when request URLs have them. [#18](https://github.com/akito19/rack-joint/pull/18)
 
